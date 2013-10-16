@@ -1,0 +1,79 @@
+<mgv> it'll be a simple class: a few fields and one or more constructors. not much else is needed
+<rmad> ok
+<mgv> 2. the EmailSender interface, which looks like this:
+<mgv> interface EmailSender {
+<mgv>     public void sendEmail(Email email);
+<mgv> }
+<rmad> ok
+<mgv> 3. various implementations of the EmailSender interface. for the first version you'll only need a DummyEmailSender which just writes the email to stdout
+<rmad> ok
+<mgv> then, when the user presses the send button
+<mgv> you will create an email from the fields the user filled out
+<mgv> then you will get an instance of EmailSender from the configuration and call its send method with the email you generated at the previous step
+<rmad> ok
+<mgv> before writing the configuration interface, "getting an instance of EmailSender from the configuration" will be "EmailSender sender=new DummyEmailSender():"
+<mgv> ; instead of :
+<rmad> i do not understand the configuration interface. is it the one that will contain IMAP,POP,SMTP addresses?
+<mgv> the configuration interface will be a third frame in which the user can configure various stuff
+<mgv> including imap/pop/smtp/whatever else
+<rmad> ok
+<rmad> that information will be required in the email sender?
+<rmad> right?
+<mgv> each implementation of emailsender can have some fields
+<mgv> for example
+<mgv> DummyEmailSender will not need any fields
+<mgv> but SMTPEmailSender will look like:
+<mgv> class SMTPEmailSender implements EmailSender{
+<mgv>     private String smtpServer="mail.whatever.com";
+<mgv>     private int smtpPort=1111;
+<mgv>     private String smtpUsername="mgv";
+<mgv>     private String smtpPassword="password";
+<mgv>  
+<mgv>     public void sendEmail(Email email){
+<mgv>         ...
+<mgv>     }
+<mgv> }
+<rmad> ok
+<rmad> when will the user get the chance of filling up the configuration?
+<mgv> the main frame will probably have a menu that will let the user open the configuration frame
+<mgv> something like Edit > Preferences
+<mgv> and compose will be something like Email > Compose email
+<rmad> ok
+<rmad> but i don't know how to create a menu strip in java. used it in .NET which was pretty easy.
+<mgv> http://docs.oracle.com/javase/tutorial/uiswing/components/menu.html
+<mgv> it looks very simple
+<rmad> ok. so my next work is on the main frame.
+<rmad> one more question
+<mgv> sure
+<rmad> suppose i need a method from another class that is in another class. Will inheritance work?
+<mgv> I'll try to rephrase that question
+<mgv> are you asking whether static method inheritance works?
+<mgv> i.e.:
+<mgv> class A{
+<mgv>     public void method(){
+<mgv>         System.out.println("in class A");
+<mgv>     }
+<mgv> }
+<rmad> i do not know static method inheritance
+<mgv> class B extends A{
+<mgv>     public void method(){
+<mgv> stop
+<mgv> ok
+<mgv> rephrase your question
+<mgv> so that I can answer it
+<rmad> ok
+<rmad> here's my question
+<rmad> suppose i am sending an email
+<rmad> on clicking send button, I need to use some interface in some other class that is present in another .java file. So will 'extend' or 'implements' work fine?
+<mgv> extends and implements always work
+<mgv> you will do something like:
+<mgv> Email email=whatever;
+<mgv> EmailSender emailSender=getEmailSenderFromConfiguration();
+<mgv> emailSender.sendEmail(email);
+<rmad> ok
+<rmad> email is an object of EMail class. right?
+<mgv> yes
+<rmad> what kind of datatype is 'whatever'?
+<mgv> it's not a datatype
+<mgv> it's a placeholder for something like:
+<mgv> Email email=new Email(param1, param2, ...);
